@@ -1,0 +1,108 @@
+{
+              "type": "FeatureCollection",
+              "features": [
+                {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [77.633333, 9.517222]
+                  },
+                  "properties": {
+                    "name": "Harish Aasish",
+                    "class": "Inner Engineering, BSP, Samyama",
+                    "phone": "+91 1234567890",
+                    "whatsapp_number": "+91 1234567890",
+                    "email": "harish.aasish@gmail.com",
+                    "email2": "aasish.harish@gmail.com",
+                    "email3": "showdambika@gmail.com",
+                    "address": "24, Koonankulam Melpakkam North Street, Srivilliputhur, Virudhunagar, Tamil Nadu, 626125, India"
+                  }
+                },
+                {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [77.633333, 9.517222]
+                  },
+                  "properties": {
+                    "name": "Prem",
+                    "class": "Inner Engineering, BSP",
+                    "phone": "+91 2345678901",
+                    "whatsapp_number": "+91 2345678901",
+                    "email": "herepremg@gmail.com",
+                    "email2": "mailtopremfromindia@gmail.com",
+                    "email3": "heepremg@gmail.com",
+                    "address": "86/46/1, Ayyampatti, Chekkadi Street, Srivilliputhur, Virudhunagar, Tamil Nadu, 626125, India"
+                  }
+                },
+                {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [77.81139, 9.4500]
+                  },
+                  "properties": {
+                    "name": "Ganesh",
+                    "class": "Inner Engineering, BSP, Samyama",
+                    "phone": "+91 4567890123",
+                    "whatsapp_number": "+91 4567890123",
+                    "email": "ganesh23860@gmail.com",
+                    "email2": "kntradesvks@gmail.com",
+                    "email3": "",
+                    "address": "41, ch. Shanmugam Road, Sivakasi, Virudhunagar, Tamil Nadu, 626123, India"
+                  }
+                },
+                {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [77.81139, 9.4500]
+                  },
+                  "properties": {
+                    "name": "KaniKalirajan",
+                    "class": "Inner Engineering, BSP",
+                    "phone": "+91 5678901234",
+                    "whatsapp_number": "+91 5678901234",
+                    "email": "kanikalirajan009@gmail.com",
+                    "email2": "nandhanam.svks@gmail.com",
+                    "email3": "k.sajatha123@gmail.com",
+                    "address": "1333, Parasakthi colony, Sivakasi, Virudhunagar, Tamil Nadu, 626123, India"
+                  }
+                },
+                {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [77.5500, 9.4530]
+                  },
+                  "properties": {
+                    "name": "Akileshram",
+                    "class": "Inner Engineering, BSP",
+                    "phone": "+91 6789012345",
+                    "whatsapp_number": "+91 6789012345",
+                    "email": "akilesheam22@gamil.com",
+                    "email2": "",
+                    "email3": "",
+                    "address": "12 A, Kamaraj Nagar, Rajapalayam, Virudhunagar, Tamil Nadu, 626117, India"
+                  }
+                },
+                {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [77.5500, 9.4530]
+                  },
+                  "properties": {
+                    "name": "Anandh",
+                    "class": "Inner Engineering, BSP, Samyama",
+                    "phone": "7890123456",
+                    "whatsapp_number": "7890123456",
+                    "email": "tk.ananthu@gmail.com",
+                    "email2": "anandh.kandhimathinathan@gmail.com",
+                    "email3": "kandhianand@gmail.com",
+                    "address": "1/2, VOC Nagar, Shenbagathoppu Road, Near AK Tea Stall, Rajapalayam, Virudhunagar, Tamil Nadu, 626117, India"
+                  }
+                }
+              ]
+            }
+            

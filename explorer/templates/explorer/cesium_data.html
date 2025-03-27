@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santosha Globe Earth</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .title {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .title span:first-child {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .title span:last-child {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff6600;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f1f1f1;
+            border-radius: 20px;
+            padding: 5px 15px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: none;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .user-icon {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            background-color: #ff6600;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .button-container {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .button-container button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            background-color: #f1f1f1;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-container button:hover {
+            background-color: #ddd;
+        }
+
+        .mapboxgl-control-container .mapboxgl-ctrl-logo,
+        .mapboxgl-control-container .mapboxgl-ctrl-attrib {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="title">
+            <span>Santosha</span>
+            <span>Explorer</span>
+        </div>
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search..." onkeydown="handleSearchKeyDown(event)">
+                <button onclick="performSearch()">🔍</button>
+            </div>
+        </div>
+        <div class="user-icon" id="userIcon" title="Guest">?</div>
+    </div>
+
+    <div class="button-container">
+        <button id="allBtn">All</button>
+        <button id="innerEngineeringBtn">Inner Engineering</button>
+        <button id="bspBtn">BSP</button>
+        <button id="samyamaBtn">Samyama</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoicHJlbWFuYW5kaCIsImEiOiJjbTVkaHFxM3YweWJqMmpxb3BscHpyOG5vIn0.Rsz0ujmiYLBdCbvmbjesWQ';
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/satellite-streets-v12',
+            center: [77.6324, 9.5086], // Initial center coordinates
+            zoom: 5,
+            pitch: 45,
+            bearing: 0,
+            projection: 'globe',
+        });
+
+        let markers = [];
+
+        map.on('style.load', () => {
+            map.setFog({
+                'range': [-1, 2],
+                'color': 'white',
+                'horizon-blend': 0.2,
+                'high-color': 'white',
+                'space-color': 'white',
+                'star-intensity': 0,
+            });
+
+            fetch('/static/explorer/isha_data.geojson')
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('GeoJSON file not found');
+                    }
+                    return response.json();
+                })
+                .then((geojsonData) => {
+                    console.log('GeoJSON Data:', geojsonData);
+                    if (geojsonData && geojsonData.features) {
+                        geojsonData.features.forEach((feature) => {
+                            const { geometry, properties } = feature;
+                            const { coordinates } = geometry;
+                            const {
+                                name = 'N/A',
+                                class: yogaClass = 'N/A',
+                                phone = 'N/A',
+                                whatsapp_number = 'N/A',
+                                email = 'N/A',
+                                address = 'N/A',
+                            } = properties;
+
+                            // Normalize the 'class' field to always be an array
+                            const yogaClasses = Array.isArray(yogaClass) ? yogaClass : yogaClass.split(',').map(item => item.trim().toLowerCase());
+
+
+                            if (coordinates && coordinates.length === 2) {
+                                const markerElement = document.createElement('div');
+                                markerElement.style.backgroundImage = 'url(/static/images/yoga_heart.png)';
+                                markerElement.style.backgroundSize = 'contain';
+                                markerElement.style.width = '40px';
+                                markerElement.style.height = '40px';
+
+                                const marker = new mapboxgl.Marker({ element: markerElement })
+                                    .setLngLat(coordinates)
+                                    .setPopup(
+                                        new mapboxgl.Popup({ offset: 25 }).setHTML(`
+                                            <h3>${name}</h3>
+                                            <p><strong>Class:</strong> ${yogaClasses.join(', ')}</p>
+                                            <p><strong>Phone:</strong> ${phone}</p>
+                                            <p><strong>WhatsApp:</strong> ${whatsapp_number}</p>
+                                            <p><strong>Email:</strong> ${email}</p>
+                                            <p><strong>Address:</strong> ${address}</p>
+                                        `)
+                                    )
+                                    .addTo(map);
+
+                                markers.push({ marker, category: yogaClasses });
+                            }
+                        });
+
+                        const firstFeature = geojsonData.features[0];
+                        if (firstFeature && firstFeature.geometry && firstFeature.geometry.coordinates) {
+                            map.flyTo({ center: firstFeature.geometry.coordinates, zoom: 10 });
+                        }
+                    } else {
+                        console.error('Invalid GeoJSON data:', geojsonData);
+                    }
+
+                    updateButtonCounts();  // Update the counts after markers are added
+                })
+                .catch((error) => {
+                    console.error('Error loading GeoJSON:', error);
+                    const fallbackCoordinates = [77.6324, 9.5086];
+                    new mapboxgl.Marker()
+                        .setLngLat(fallbackCoordinates)
+                        .setPopup(
+                            new mapboxgl.Popup({ offset: 25 }).setHTML('<h3>Fallback Marker</h3><p>This is a test marker.</p>')
+                        )
+                        .addTo(map);
+                });
+        });
+
+        function performSearch() {
+            const searchInput = document.getElementById('searchInput').value.trim();
+            if (!searchInput) {
+                alert('Please enter a search term.');
+                return;
+            }
+
+            const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+                searchInput
+            )}.json?access_token=${mapboxgl.accessToken}`;
+
+            fetch(geocodingUrl)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.features && data.features.length > 0) {
+                        const coordinates = data.features[0].center;
+                        map.flyTo({ center: coordinates, zoom: 10 });
+                    } else {
+                        alert('No results found.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching geocoding data:', error);
+                    alert('Error performing search.');
+                });
+        }
+
+        function handleSearchKeyDown(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        }
+
+        function updateButtonCounts() {
+            const counts = {
+                All: markers.length,
+                'Inner Engineering': markers.filter(m => m.category.some(c => c.includes('inner engineering'))).length,
+                BSP: markers.filter(m => m.category.some(c => c.includes('bsp'))).length,
+                Samyama: markers.filter(m => m.category.some(c => c.includes('samyama'))).length,
+            };
+        
+            document.getElementById('allBtn').textContent = `All (${counts.All})`;
+            document.getElementById('innerEngineeringBtn').textContent = `Inner Engineering (${counts['Inner Engineering']})`;
+            document.getElementById('bspBtn').textContent = `BSP (${counts['BSP']})`;
+            document.getElementById('samyamaBtn').textContent = `Samyama (${counts['Samyama']})`;
+        }
+        
+        
+        document.getElementById('allBtn').onclick = () => filterMarkers('All');
+        document.getElementById('innerEngineeringBtn').onclick = () => filterMarkers('Inner Engineering');
+        document.getElementById('bspBtn').onclick = () => filterMarkers('BSP');
+        document.getElementById('samyamaBtn').onclick = () => filterMarkers('Samyama');
+        
+        function filterMarkers(category) {
+            markers.forEach(({ marker, category: markerCategory }) => {
+                const isVisible = category === 'All' || markerCategory.some(c => c.includes(category.toLowerCase()));
+                marker.getElement().style.display = isVisible ? 'block' : 'none';
+            });
+        };
+
+        window.onload = () => {
+            const savedUser = JSON.parse(sessionStorage.getItem('user'));
+            const userIcon = document.getElementById('userIcon');
+
+            if (savedUser && savedUser.firstName) {
+                userIcon.textContent = savedUser.firstName.charAt(0).toUpperCase();
+                userIcon.title = `${savedUser.firstName} ${savedUser.lastName}`;
+            } else {
+                userIcon.textContent = '?';
+                userIcon.title = 'Guest';
+            }
+
+        }; 
+    </script>
+</body>
+
+</html>
