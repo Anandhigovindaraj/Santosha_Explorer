@@ -13,5 +13,6 @@ A web application built with Django to manage and explore yoga programs and clas
 
 ![screenshot](https://github.com/Anandhigovindaraj/Santosha_Explorer/blob/2f5ad7f1a964751b3ba70882856d9939aeb39913/mainpage.png)
 ![screenshot](https://github.com/Anandhigovindaraj/Santosha_Explorer/blob/edfda5bc79cfd95b4c980cfc180f046b30f83658/fullpage.png)
-![screemshot](https://github.com/Anandhigovindaraj/Santosha_Explorer/blob/3c4ae2b72d8cc8d3e08da956c7528e22562d2533/homepage.png)
+![screenshot](https://github.com/Anandhigovindaraj/Santosha_Explorer/blob/3c4ae2b72d8cc8d3e08da956c7528e22562d2533/homepage.png)
+![screenshot](https://github.com/Anandhigovindaraj/Santosha_Explorer/blob/4c4401850887643d960fe676d4991770f1f53478/login%20page.png)
 
