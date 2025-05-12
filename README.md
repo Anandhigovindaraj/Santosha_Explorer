@@ -10,3 +10,5 @@ A web application built with Django to manage and explore yoga programs and clas
 - 📅 Schedule or browse classes by day or category
 - 🔍 Clean and user-friendly interface
 - 🖼️ Beautiful UI showcasing yoga poses and class information
+
+![screenshot](https://github.com/Anandhigovindaraj/Santosha_Explorer/blob/2f5ad7f1a964751b3ba70882856d9939aeb39913/mainpage.png)
